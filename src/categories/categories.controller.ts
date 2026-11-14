@@ -26,26 +26,22 @@ export class CategoriesController {
             this.clientProxyGameRanking.getClientProxyAdminBackendInstance();
     }
 
-    @Get('')
-    getRoot() {
-        return JSON.stringify('Hello World! API GATEWAT WORKING');
-    }
-
-    @Post('categorias')
+    @Post()
     @UsePipes(ValidationPipe)
     createCategory(@Body() createCategoryDto: CreateCategoryDto) {
         // por usar o emit do broker, não há necessidade de usar return na função
         this.clientAdminBackend.emit('criar-categoria', createCategoryDto);
     }
 
-    @Get('categorias')
-    findCategory(@Query('idCatedoria') _id: string): Observable<any> {
+    @Get()
+    findCategories(@Query('idCatedoria') _id: string): Observable<any> {
+        // send espera um retorno o um objeto categoria ou um array<Categorias>
         return this.clientAdminBackend.send(
             'consultar-categorias',
             _id ? _id : '',
         );
     }
-    @Put('categorias/:_id')
+    @Put('/:_id')
     @UsePipes(ValidationPipe)
     async updateCategory(
         @Param('_id') _id: string,
