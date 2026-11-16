@@ -18,14 +18,14 @@ export class AwsService {
             this.configService.get<string>('AWS_SECRETACESSKEY');
         const bucket = this.configService.get<string>('AWS_BUCKET');
 
-        const region = this.configService.get<string>('AWS_REGION');
+        const awsRegion = this.configService.get<string>('AWS_REGION');
         const awsDomain = 'amazonaws.com/';
         if (!accessKeyId || !secretAccessKey || !bucket) {
             throw new Error('AWS credentials or bucket are not configured');
         }
 
         const s3Client = new S3Client({
-            region: region,
+            region: awsRegion,
             credentials: {
                 accessKeyId,
                 secretAccessKey,
@@ -46,7 +46,7 @@ export class AwsService {
             await s3Client.send(new PutObjectCommand(params));
             return {
                 // url da imagem no bucket s3 da aws
-                url: `http://${bucket}.s3.${region}.${awsDomain}${urlKey}`,
+                url: `http://${bucket}.s3.${awsRegion}.${awsDomain}${urlKey}`,
             };
         } catch (error: unknown) {
             const errorMessage = `Error from S3 while uploading object to ${bucket}. \

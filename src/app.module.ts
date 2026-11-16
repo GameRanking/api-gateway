@@ -8,7 +8,7 @@ import { AwsModule } from './aws/aws.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({ isGlobal: true }),
         ProxyRMQModule,
         CategoriesModule,
         PlayersModule,

@@ -4,17 +4,29 @@ import {
     ClientProxyFactory,
     Transport,
 } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ClientProxyGameRanking {
-    private user = process.env.RABBITMQ_USER;
-    private password = process.env.RABBITMQ_PASSWORD;
-    private host = process.env.RABBITMQ_HOST;
-    private vhost = process.env.RABBITMQ_VIRTUAL_HOST;
-    private rmqProtocol = process.env.RABBITMQ_PROTOCOL;
-    private rmqQueue = process.env.RABBITMQ_QUEUE;
+    private readonly user: string;
+    private readonly password: string;
+    private readonly host: string;
+    private readonly vhost: string;
+    private readonly rmqProtocol: string;
+    private readonly rmqQueue: string;
+    private readonly url: string;
 
-    private url = `${this.rmqProtocol}${this.user}:${this.password}@${this.host}${this.vhost}`;
+    constructor(private readonly configService: ConfigService) {
+        this.user = this.configService.get<string>('RABBITMQ_USER')!;
+        this.password = this.configService.get<string>('RABBITMQ_PASSWORD')!;
+        this.host = this.configService.get<string>('RABBITMQ_HOST')!;
+
+        this.vhost = this.configService.get<string>('RABBITMQ_VIRTUAL_HOST')!;
+        this.rmqProtocol = this.configService.get<string>('RABBITMQ_PROTOCOL')!;
+        this.rmqQueue = this.configService.get<string>('RABBITMQ_QUEUE')!;
+
+        this.url = `${this.rmqProtocol}${this.user}:${this.password}@${this.host}${this.vhost}`;
+    }
 
     getClientProxyAdminBackendInstance(): ClientProxy {
         return ClientProxyFactory.create({
