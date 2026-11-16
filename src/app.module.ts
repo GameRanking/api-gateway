@@ -4,6 +4,7 @@ import { ProxyRMQModule } from './proxyrmq/proxyrmq.module';
 import { ClientProxyGameRanking } from './proxyrmq/client-proxy';
 import { CategoriesModule } from './categories/categories.module';
 import { PlayersModule } from './players/players.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
     imports: [
@@ -11,6 +12,7 @@ import { PlayersModule } from './players/players.module';
         ProxyRMQModule,
         CategoriesModule,
         PlayersModule,
+        AwsModule,
     ],
     controllers: [],
     providers: [ClientProxyGameRanking],

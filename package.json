@@ -21,11 +21,13 @@
     "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1169.0",
     "@nestjs/common": "^12.0.1",
     "@nestjs/config": "^12.1.1",
     "@nestjs/core": "^12.0.1",
     "@nestjs/microservices": "^12.4.2",
     "@nestjs/platform-express": "^12.0.1",
+    "@smithy/types": "^4.20.0",
     "amqp-connection-manager": "^5.0.1",
     "amqplib": "^2.3.1",
     "class-transformer": "^0.5.1",
@@ -55,7 +57,8 @@
     "typescript": "^6.0.2"
   },
   "allowScripts": {
-    "@parcel/watcher@2.6.0": true
+    "@parcel/watcher@2.6.0": true,
+    "aws-sdk@2.1693.0": true
   },
   "overrides": {
     "glob": "^14.0.4",
