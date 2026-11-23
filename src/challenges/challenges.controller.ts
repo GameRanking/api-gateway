@@ -250,7 +250,7 @@ export class ChallengesController {
     }
 
     @Delete('/:_id')
-    async deletaeChallenge(@Param('_id') _id: string) {
+    async deleteChallenge(@Param('_id') _id: string) {
         const challenge: Challenge = await this.clientChallenge.send(
             'consultar-desafios',
             { idPlayer: '', _id: _id },
