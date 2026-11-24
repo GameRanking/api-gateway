@@ -41,7 +41,7 @@ export class ChallengesController {
 
     @Post()
     @UsePipes(ValidationPipe)
-    async criarDesafio(@Body() createChallengeDto: CreateChallengeDto) {
+    async createChallenge(@Body() createChallengeDto: CreateChallengeDto) {
         this.logger.log(
             `criarDesafioDto: ${JSON.stringify(createChallengeDto)}`,
         );
@@ -116,9 +116,7 @@ export class ChallengesController {
     }
 
     @Get()
-    async consultarDesafios(
-        @Query('idJogador') idPlayer: string,
-    ): Promise<any> {
+    async findChallenges(@Query('idJogador') idPlayer: string): Promise<any> {
         /*
             Verificamos se o jogador informado está cadastrado
         */
@@ -147,7 +145,7 @@ export class ChallengesController {
     }
 
     @Put('/:desafio')
-    async atualizarDesafio(
+    async updateChallenge(
         @Body(ChallengeStatusValidationPipe)
         UpdateChallengeDto: UpdateChallengeDto,
         @Param('desafio') _id: string,
@@ -179,20 +177,19 @@ export class ChallengesController {
         }
 
         await this.clientChallenge.emit('atualizar-desafio', {
-            id: _id,
-            desafio: UpdateChallengeDto,
+            _id: _id,
+            challenge: UpdateChallengeDto,
         });
     }
 
     @Post('/:desafio/partida/')
-    async atribuirDesafioPartida(
+    async linkChallengeToMatch(
         @Body(ValidationPipe) linkChallengeMatchDto: LinkChallengeMatchDto,
         @Param('desafio') _id: string,
     ) {
-        const challenge: Challenge = await this.clientChallenge.send(
-            'consultar-desafios',
-            { idPlayer: '', _id: _id },
-        );
+        const challenge: Challenge = await this.clientChallenge
+            .send('consultar-desafios', { idPlayer: '', _id: _id })
+            .toPromise();
 
         this.logger.log(`desafio: ${JSON.stringify(challenge)}`);
 
@@ -243,6 +240,7 @@ export class ChallengesController {
         match.players = challenge.players;
         match.result = linkChallengeMatchDto.result;
 
+        this.logger.log(`Partida: ${JSON.stringify(match)}`);
         /*
             Enviamos a partida para o tópico 'criar-partida'
             Este tópico é responsável por persitir a partida na 
@@ -252,7 +250,7 @@ export class ChallengesController {
     }
 
     @Delete('/:_id')
-    async deletarDesafio(@Param('_id') _id: string) {
+    async deleteChallenge(@Param('_id') _id: string) {
         const challenge: Challenge = await this.clientChallenge.send(
             'consultar-desafios',
             { idPlayer: '', _id: _id },
