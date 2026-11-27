@@ -15,6 +15,7 @@ export class ClientProxyGameRanking {
     private readonly rmqProtocol: string;
     private readonly rmqQueue: string;
     private readonly rmqQueueChallenge: string;
+    private readonly rmqQueueRankings: string;
     private readonly url: string;
 
     constructor(private readonly configService: ConfigService) {
@@ -30,6 +31,10 @@ export class ClientProxyGameRanking {
         )!;
         this.rmqQueueChallenge = this.configService.get<string>(
             'RABBITMQ_QUEUE_CHALLENGE',
+        )!;
+
+        this.rmqQueueRankings = this.configService.get<string>(
+            'RABBITMQ_QUEUE_RANKINGS',
         )!;
 
         this.url = `${this.rmqProtocol}${this.user}:${this.password}@${this.host}${this.vhost}`;
@@ -51,6 +56,16 @@ export class ClientProxyGameRanking {
             options: {
                 urls: [this.url],
                 queue: this.rmqQueueChallenge,
+            },
+        });
+    }
+
+    getClientProxyRankingsInstance(): ClientProxy {
+        return ClientProxyFactory.create({
+            transport: Transport.RMQ,
+            options: {
+                urls: [this.url],
+                queue: this.rmqQueueRankings,
             },
         });
     }

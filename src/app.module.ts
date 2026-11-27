@@ -6,6 +6,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { PlayersModule } from './players/players.module';
 import { AwsModule } from './aws/aws.module';
 import { ChallengesModule } from './challenges/challenges.module';
+import { RankingsModule } from './rankings/rankings.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { ChallengesModule } from './challenges/challenges.module';
         PlayersModule,
         AwsModule,
         ChallengesModule,
+        RankingsModule,
     ],
     controllers: [],
     providers: [ClientProxyGameRanking],
